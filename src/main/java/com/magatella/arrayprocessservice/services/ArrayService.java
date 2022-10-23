@@ -73,8 +73,8 @@ public class ArrayService {
                 lists.add(list);
             }
         }
-        return lists.stream().filter(j -> (j.size() == (
-                lists.stream().mapToInt(ArrayList::size).max().getAsInt())))
+        Integer maxSizeList = lists.stream().mapToInt(ArrayList::size).max().getAsInt();
+        return lists.stream().filter(j -> (j.size() == (maxSizeList)))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -99,9 +99,8 @@ public class ArrayService {
                 lists.add(list);
             }
         }
-        return lists.stream().filter(j -> (j.size() == (
-                        lists.stream().mapToInt(ArrayList::size).max().getAsInt())))
+        Integer maxSizeList = lists.stream().mapToInt(ArrayList::size).max().getAsInt();
+        return lists.stream().filter(j -> (j.size() == (maxSizeList)))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
 }
