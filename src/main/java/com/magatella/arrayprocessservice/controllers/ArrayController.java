@@ -13,40 +13,51 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/find")
 public class ArrayController {
 
-    ArrayService arrayService = new ArrayService();
+    private final ArrayService arrayService;
 
     public ArrayController(ArrayService arrayService) {
         this.arrayService = arrayService;
     }
 
-    @Cacheable(value = "calculates", key = "{@arrayService.CheckSumFile(#requestDTO.getFilePath()), #requestDTO.getOperation()}")
-    @RequestMapping(method = RequestMethod.POST, value = "/")
-    public ResponseEntity<ResponseDTO> resultfind(@RequestBody RequestDTO requestDTO) {
+    @Cacheable(value = "calculates", key = "{@arrayService.CheckSumFile(#requestDTO.getFilePath()), #requestDTO.getOperation(), #operation}")
+    @RequestMapping(method = RequestMethod.GET, value = {"/", "/{operation}"},
+                    produces = {"application/json", "application/xml"})
+    public ResponseEntity<ResponseDTO> resultfindGet(@RequestBody RequestDTO requestDTO,
+                                                     @PathVariable(name = "operation", required = false) String operation) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("accept", "application/json");
-        //TODO add other headers
 
-        if(requestDTO.getOperation().equals("get_max_value")) {
-            System.out.println("Operation get_max making!");
-            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), headers, HttpStatus.OK);
+        if((requestDTO.getOperation() != null) && requestDTO.getOperation().equals("get_max_value") ||
+                ((operation != null) && (operation.equals("get_max_value"))))
+        {
+            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), HttpStatus.OK);
         }
-        if(requestDTO.getOperation().equals("get_min_value")){
-            return new ResponseEntity<>(new ResponseDTO(arrayService.findMinValue(requestDTO.getFilePath())), HttpStatus.OK);
+        if((requestDTO.getOperation() != null) && requestDTO.getOperation().equals("get_min_value") ||
+                ((operation != null) && (operation.equals("get_min_value"))))
+        {
+            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), HttpStatus.OK);
         }
-        if(requestDTO.getOperation().equals("get_median_value")){
-            return new ResponseEntity<>(new ResponseDTO(arrayService.findMedianValue(requestDTO.getFilePath())), HttpStatus.OK);
+        if((requestDTO.getOperation() != null) && requestDTO.getOperation().equals("get_median_value") ||
+                ((operation != null) && (operation.equals("get_median_value"))))
+        {
+            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), HttpStatus.OK);
         }
-        if(requestDTO.getOperation().equals("get_avg_value")){
-            return new ResponseEntity<>(new ResponseDTO(arrayService.calcAvgValue(requestDTO.getFilePath())), HttpStatus.OK);
+        if((requestDTO.getOperation() != null) && requestDTO.getOperation().equals("get_avg_value") ||
+                ((operation != null) && (operation.equals("get_avg_value"))))
+        {
+            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), HttpStatus.OK);
         }
-        if(requestDTO.getOperation().equals("get_ascsubseq_value")){
-            return new ResponseEntity<>(new ResponseDTO(arrayService.findAscendingSubsequence(requestDTO.getFilePath())), HttpStatus.OK);
+        if((requestDTO.getOperation() != null) && requestDTO.getOperation().equals("get_ascsubseq_value") ||
+                ((operation != null) && (operation.equals("get_ascsubseq_value"))))
+        {
+            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), HttpStatus.OK);
         }
-        if(requestDTO.getOperation().equals("get_descsubseq_value")){
-            return new ResponseEntity<>(new ResponseDTO(arrayService.findDescendingSubsequence(requestDTO.getFilePath())), HttpStatus.OK);
+        if((requestDTO.getOperation() != null) && requestDTO.getOperation().equals("get_descsubseq_value") ||
+                ((operation != null) && (operation.equals("get_descsubseq_value"))))
+        {
+            return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), HttpStatus.OK);
         }
-        return null;
+        else return ResponseEntity.badRequest().build();
     }
-
 }
