@@ -3,11 +3,11 @@ package com.magatella.arrayprocessservice.controllers;
 import com.magatella.arrayprocessservice.models.RequestDTO;
 import com.magatella.arrayprocessservice.models.ResponseDTO;
 import com.magatella.arrayprocessservice.services.ArrayService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/find")
@@ -19,6 +19,7 @@ public class ArrayController {
         this.arrayService = arrayService;
     }
 
+    @Cacheable(value = "calculates", key = "{@arrayService.CheckSumFile(#requestDTO.getFilePath()), #requestDTO.getOperation()}")
     @RequestMapping(method = RequestMethod.POST, value = "/")
     public ResponseEntity<ResponseDTO> resultfind(@RequestBody RequestDTO requestDTO) {
 
@@ -27,6 +28,7 @@ public class ArrayController {
         //TODO add other headers
 
         if(requestDTO.getOperation().equals("get_max_value")) {
+            System.out.println("Operation get_max making!");
             return new ResponseEntity<>(new ResponseDTO(arrayService.findMaxValue(requestDTO.getFilePath())), headers, HttpStatus.OK);
         }
         if(requestDTO.getOperation().equals("get_min_value")){

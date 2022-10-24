@@ -4,6 +4,7 @@ import com.magatella.arrayprocessservice.services.ArrayService;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public class FileTest {
     ArrayService arrayService = new ArrayService();
@@ -42,5 +43,15 @@ public class FileTest {
     @Test
     public void findDescendingSubsequence() throws IOException{
         System.out.println(arrayService.findDescendingSubsequence(filePath));
+    }
+
+    @Test
+    public void calcCheckSumFile() {
+        System.out.println(arrayService.CheckSumFile(filePath));
+    }
+
+    @Test
+    public void calcCheckSumFile2() {
+        System.out.println(arrayService.hashcodeFile(filePath));
     }
 }
