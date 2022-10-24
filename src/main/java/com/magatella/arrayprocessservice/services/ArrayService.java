@@ -3,12 +3,7 @@ package com.magatella.arrayprocessservice.services;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SeekableByteChannel;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,25 +12,29 @@ import java.util.stream.Stream;
 @Service
 public class ArrayService {
 
-    public ArrayList<Integer> readFromFile(String filePath) throws IOException {
+    public ArrayList<Integer> readFromFile(String filePath) {
         ArrayList<Integer> integerArrayList;
-
-        Stream<String> readStream = Files.lines(Paths.get(filePath));
+        Stream<String> readStream = null;
+        try {
+            readStream = Files.lines(Paths.get(filePath));
+        }catch (IOException e){
+            e.getMessage();
+        }
         integerArrayList = readStream.map(Integer::parseInt).collect(Collectors.toCollection(ArrayList::new));
         return integerArrayList;
     }
 
-    public Integer findMaxValue(String filePath) throws IOException {
+    public String findMaxValue(String filePath) {
         ArrayList<Integer> integerArrayList = readFromFile(filePath);
-        return Collections.max(integerArrayList);
+        return Collections.max(integerArrayList).toString();
     }
 
-    public Integer findMinValue(String filePath) throws IOException {
+    public String findMinValue(String filePath) {
         ArrayList<Integer> integerArrayList = readFromFile(filePath);
-        return Collections.min(integerArrayList);
+        return Collections.min(integerArrayList).toString();
     }
 
-    public String findMedianValue(String filePath) throws IOException {
+    public String findMedianValue(String filePath) {
         ArrayList<Integer> integerArrayList = readFromFile(filePath);
         integerArrayList.sort(Comparator.naturalOrder());
 
@@ -47,12 +46,13 @@ public class ArrayService {
         }
     }
 
-    public Double calcAvgValue(String filePath) throws IOException {
+    public String calcAvgValue(String filePath) {
         ArrayList<Integer> integerArrayList = readFromFile(filePath);
-        return integerArrayList.stream().mapToDouble(value -> value).average().orElse(0.0);
+        Double result = integerArrayList.stream().mapToDouble(value -> value).average().orElse(0.0);
+        return result.toString();
     }
 
-    public ArrayList<ArrayList<Integer>> findAscendingSubsequence(String filePath) throws IOException {
+    public String findAscendingSubsequence(String filePath) {
         ArrayList<Integer> integerArrayList = readFromFile(filePath);
         ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
         ArrayList<Integer> list = new ArrayList<>();
@@ -75,10 +75,10 @@ public class ArrayService {
         }
         Integer maxSizeList = lists.stream().mapToInt(ArrayList::size).max().getAsInt();
         return lists.stream().filter(j -> (j.size() == (maxSizeList)))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toCollection(ArrayList::new)).toString();
     }
 
-    public ArrayList<ArrayList<Integer>> findDescendingSubsequence(String filePath) throws IOException {
+    public String findDescendingSubsequence(String filePath) {
         ArrayList<Integer> integerArrayList = readFromFile(filePath);
         ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
         ArrayList<Integer> list = new ArrayList<>();
@@ -101,6 +101,6 @@ public class ArrayService {
         }
         Integer maxSizeList = lists.stream().mapToInt(ArrayList::size).max().getAsInt();
         return lists.stream().filter(j -> (j.size() == (maxSizeList)))
-                .collect(Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toCollection(ArrayList::new)).toString();
     }
 }
