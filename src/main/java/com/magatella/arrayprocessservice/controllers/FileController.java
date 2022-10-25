@@ -2,12 +2,20 @@ package com.magatella.arrayprocessservice.controllers;
 
 import com.magatella.arrayprocessservice.models.ResponseDTO;
 import com.magatella.arrayprocessservice.services.ArrayService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 public class FileController {
@@ -18,9 +26,18 @@ public class FileController {
         this.arrayService = arrayService;
     }
 
+    @Operation(summary = "Запрос для нахождения результата, передавая путь файла")
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
-    public ResponseEntity<ResponseDTO> uploadFile(@RequestParam(name = "file") MultipartFile file,
-                                                  @RequestParam(name = "operation") String operation) throws IOException {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешный вывод результата",
+                    content = {
+                            @Content(mediaType = APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+            @ApiResponse(responseCode = "400", description = "Тип операции не найден или файл не отправлен", content = @Content)
+    })
+    public ResponseEntity<ResponseDTO> uploadFile(@Parameter(name = "Файл", required = true) @RequestParam(name = "file") MultipartFile file,
+                                                  @Parameter(name = "Тип операции", required = true)@RequestParam(name = "operation") String operation) throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("accept", "application/xml");
