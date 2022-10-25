@@ -3,55 +3,47 @@ package com.magatella.arrayprocessservice;
 import com.magatella.arrayprocessservice.services.ArrayService;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-
 public class FileTest {
-    ArrayService arrayService = new ArrayService();
+    ArrayService arrayService;
     String filePath = "D:/Projects/JavaDev/test_data/10m.txt";
 
     @Test
-    public void fileTest() throws IOException {
+    public void fileTest() {
         arrayService.readFromFile(filePath);
     }
 
     @Test
-    public void findMaxValueTest() throws IOException{
+    public void findMaxValueTest() {
         System.out.println(arrayService.findMaxValue(filePath));
     }
 
     @Test
-    public void findMinValueTest() throws IOException{
+    public void findMinValueTest() {
         System.out.println(arrayService.findMinValue(filePath));
     }
 
     @Test
-    public void findMedianValueTest() throws IOException{
+    public void findMedianValueTest() {
         System.out.println(arrayService.findMedianValue(filePath));
     }
 
     @Test
-    public void calcAvgValueTest() throws IOException{
+    public void calcAvgValueTest() {
         System.out.println(arrayService.calcAvgValue(filePath));
     }
 
     @Test
-    public void findAscendingSubsequenceTest() throws IOException{
+    public void findAscendingSubsequenceTest() {
         System.out.println(arrayService.findAscendingSubsequence(filePath));
     }
 
     @Test
-    public void findDescendingSubsequence() throws IOException{
+    public void findDescendingSubsequence() {
         System.out.println(arrayService.findDescendingSubsequence(filePath));
     }
 
     @Test
     public void calcCheckSumFile() {
         System.out.println(arrayService.CheckSumFile(filePath));
-    }
-
-    @Test
-    public void calcCheckSumFile2() {
-        System.out.println(arrayService.hashcodeFile(filePath));
     }
 }
